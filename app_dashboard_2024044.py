@@ -53,22 +53,19 @@ def make_exports_ireland():
     top_exports = top_exports.sort_values('Amount_EUR', ascending=True)
     top_exports['Amount_EUR_B'] = top_exports['Amount_EUR'] / 1e9
     top_exports['color'] = top_exports['Category'].apply(
-        lambda x: '#006400' if x in ['Dairy Produce', 'Beef'] else '#4a90a4'
-    )
-    fig = px.bar(
-        top_exports,
-        x='Amount_EUR_B', y='Category', orientation='h',
-        title="Ireland's Top 10 Agri-Food Exports by Category (2018-2022)",
-        labels={'Amount_EUR_B': 'Total Export Value (€ Billion)', 'Category': ''},
-        color='color', color_discrete_map='identity'
-    )
-    fig.update_layout(
-        showlegend=False,
-        plot_bgcolor='white',
-        paper_bgcolor='white',
-        height=500,
-        margin=dict(l=250, r=50, t=50, b=50)
-    )
+        lambda x: '#006400' if x in ['Dairy Produce', 'Beef'] else '#4a90a4')
+    
+    fig = px.bar(top_exports, 
+                 x='Amount_EUR_B',
+                 y='Category', orientation='h', 
+                 title="Ireland's Top 10 Agri-Food Exports by Category (2018-2022)",
+                 labels={'Amount_EUR_B': 'Total Export Value (€ Billion)', 'Category': ''}, 
+                 color='color', color_discrete_map='identity') 
+    fig.update_layout(showlegend=False, 
+                      plot_bgcolor='white', 
+                      paper_bgcolor='white',
+                      height=500,
+                      margin=dict(l=250, r=50, t=50, b=50))
     fig.update_xaxes(showgrid=False, tickprefix='€', ticksuffix='B')
     fig.update_yaxes(showgrid=False)
     return fig
@@ -79,13 +76,15 @@ def make_trends_dairy_beef():
     df_dairy_beef = df_dairy_beef.groupby(['Year', 'Category'])['Amount_EUR'].sum().reset_index()
     df_dairy_beef['Amount_EUR_B'] = df_dairy_beef['Amount_EUR'] / 1e9
     df_dairy_beef['Year'] = df_dairy_beef['Year'].astype(str)
-    fig = px.line(
-        df_dairy_beef,
-        x='Year', y='Amount_EUR_B', color='Category', markers=True,
-        title="Ireland's Dairy and Beef Export Trends (2018-2022)",
-        labels={'Amount_EUR_B': 'Export Value (€ Billion)', 'Year': 'Year'},
-        color_discrete_map={'Dairy Produce': '#006400', 'Beef': '#8B4513'}
-    )
+    
+    fig = px.line(df_dairy_beef, 
+                  x='Year', 
+                  y='Amount_EUR_B', 
+                  color='Category', 
+                  markers=True, 
+                  title="Ireland's Dairy and Beef Export Trends (2018-2022)",
+                  labels={'Amount_EUR_B': 'Export Value (€ Billion)', 'Year': 'Year'}, 
+                  color_discrete_map={'Dairy Produce': '#006400', 'Beef': '#8B4513'})
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False, tickprefix='€', ticksuffix='B')
@@ -97,12 +96,12 @@ def make_export_composition():
     top5_pie = total_by_cat.head(5)
     others = pd.DataFrame({'Category': ['Others'], 'Amount_EUR': [total_by_cat['Amount_EUR'][5:].sum()]})
     pie_data = pd.concat([top5_pie, others], ignore_index=True)
-    fig = px.pie(
-        pie_data,
-        names='Category', values='Amount_EUR',
-        title="Ireland's Agri-Food Export Composition (2018-2022)",
-        color_discrete_sequence=['#006400', '#8B4513', '#4a90a4', '#f4a261', '#e9c46a', '#adb5bd']
-    )
+    
+    fig = px.pie(pie_data, 
+                 names='Category', 
+                 values='Amount_EUR', 
+                 title="Ireland's Agri-Food Export Composition (2018-2022)", 
+                 color_discrete_sequence=['#006400', '#8B4513', '#4a90a4', '#f4a261', '#e9c46a', '#adb5bd'])
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
     return fig
     
@@ -113,13 +112,14 @@ def make_ireland_vs_world():
     trade_by_country['color'] = trade_by_country['Country'].apply(
         lambda x: '#006400' if x == 'Ireland' else '#4a90a4'
     )
-    fig = px.bar(
-        trade_by_country,
-        x='trade_balance', y='Country', orientation='h',
-        title='Agricultural Trade Balance by Country (Log10 Scaled, 2019-2021)',
-        labels={'trade_balance': 'Total Trade Balance (Log10)', 'Country': ''},
-        color='color', color_discrete_map='identity'
-    )
+    fig = px.bar(trade_by_country, 
+                 x='trade_balance', 
+                 y='Country', 
+                 orientation='h', 
+                 title='Agricultural Trade Balance by Country (Log10 Scaled, 2019-2021)',
+                 labels={'trade_balance': 'Total Trade Balance (Log10)', 'Country': ''}, 
+                 color='color', 
+                 color_discrete_map='identity')
     fig.update_layout(showlegend=False, plot_bgcolor='white', paper_bgcolor='white')
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
@@ -135,18 +135,13 @@ def make_model_accuracy():
     results_df_final = pd.DataFrame(results_final, columns=[
         'Model', 'Scenario 1 - All Products (%)', 'Scenario 2 - Dairy & Beef (%)'
     ])
-    fig = px.bar(
-        results_df_final,
-        x='Model',
-        y=['Scenario 1 - All Products (%)', 'Scenario 2 - Dairy & Beef (%)'],
-        barmode='group',
-        title='Supervised Learning - Model Accuracy Comparison: Scenario 1 vs Scenario 2',
-        labels={'value': 'Accuracy (%)', 'variable': 'Scenario'},
-        color_discrete_map={
-            'Scenario 1 - All Products (%)': '#4a90a4',
-            'Scenario 2 - Dairy & Beef (%)': '#006400'
-        }
-    )
+    fig = px.bar(results_df_final,
+                 x='Model',
+                 y=['Scenario 1 - All Products (%)', 'Scenario 2 - Dairy & Beef (%)'],
+                 barmode='group',
+                 title='Supervised Learning - Model Accuracy Comparison: Scenario 1 vs Scenario 2',
+                 labels={'value': 'Accuracy (%)', 'variable': 'Scenario'},
+                 color_discrete_map={'Scenario 1 - All Products (%)': '#4a90a4','Scenario 2 - Dairy & Beef (%)': '#006400'})
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white', yaxis_range=[0, 110])
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
@@ -161,18 +156,13 @@ def make_cross_validation():
     cv_comparison_df = pd.DataFrame(cv_comparison, columns=[
         'Model', 'Scenario 1 CV (%)', 'Scenario 2 CV (%)'
     ])
-    fig = px.bar(
-        cv_comparison_df,
-        x='Model',
-        y=['Scenario 1 CV (%)', 'Scenario 2 CV (%)'],
-        barmode='group',
-        title='Supervised Learning - Cross Validation Results: Scenario 1 vs Scenario 2',
-        labels={'value': 'CV Accuracy (%)', 'variable': 'Scenario'},
-        color_discrete_map={
-            'Scenario 1 CV (%)': '#4a90a4',
-            'Scenario 2 CV (%)': '#006400'
-        }
-    )
+    fig = px.bar(cv_comparison_df,
+                 x='Model',
+                 y=['Scenario 1 CV (%)', 'Scenario 2 CV (%)'],
+                 barmode='group',
+                 title='Supervised Learning - Cross Validation Results: Scenario 1 vs Scenario 2',
+                 labels={'value': 'CV Accuracy (%)', 'variable': 'Scenario'},
+                 color_discrete_map={'Scenario 1 CV (%)': '#4a90a4', 'Scenario 2 CV (%)': '#006400'})
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white', yaxis_range=[0, 110])
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
@@ -186,17 +176,12 @@ def make_kmeans():
     results_for_task3_df = pd.DataFrame(results_for_task3, columns=[
         'Scenario', 'Optimal Clusters', 'Silhouette Score', 'PCA Component 1 (%)', 'PCA Component 2 (%)'
     ])
-    fig = px.bar(
-        results_for_task3_df,
-        x='Scenario', y='Silhouette Score',
-        title='Unsupervised Learning - KMeans Silhouette Score: Scenario 1 vs Scenario 2',
-        labels={'Silhouette Score': 'Silhouette Score', 'Scenario': ''},
-        color='Scenario',
-        color_discrete_map={
-            'Scenario 1: Selecting all the products': '#4a90a4',
-            'Scenario 2: Selecting only dairy and beef products': '#006400'
-        }
-    )
+    fig = px.bar(results_for_task3_df,
+                 x='Scenario', y='Silhouette Score',
+                 title='Unsupervised Learning - KMeans Silhouette Score: Scenario 1 vs Scenario 2',
+                 labels={'Silhouette Score': 'Silhouette Score', 'Scenario': ''},
+                 color='Scenario',
+                 color_discrete_map={'Scenario 1: Selecting all the products': '#4a90a4', 'Scenario 2: Selecting only dairy and beef products': '#006400'})
     fig.update_layout(showlegend=False, plot_bgcolor='white', paper_bgcolor='white', yaxis_range=[0, 0.6])
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
@@ -208,43 +193,33 @@ def make_pca():
     results_for_task3.append(['Scenario 1: Selecting all the products', 4, 0.4397, 40.07, 27.78])
     results_for_task3.append(['Scenario 2: Selecting only dairy and beef products', 3, 0.4315, 44.48, 26.47])
     results_for_task3_df = pd.DataFrame(results_for_task3, columns=['Scenario', 'Optimal Clusters', 'Silhouette Score', 'PCA Component 1 (%)', 'PCA Component 2 (%)'])
-    fig = px.bar(
-        results_for_task3_df[['Scenario', 'PCA Component 1 (%)', 'PCA Component 2 (%)']],
-        x='Scenario',
-        y=['PCA Component 1 (%)', 'PCA Component 2 (%)'],
-        barmode='group',
-        title='Unsupervised Learning - PCA Explained Variance: Scenario 1 vs Scenario 2',
-        labels={'value': 'Explained Variance (%)', 'variable': 'Component'},
-        color_discrete_map={
-            'PCA Component 1 (%)': '#4a90a4',
-            'PCA Component 2 (%)': '#006400'
-        }
-    )
+    
+    fig = px.bar(results_for_task3_df[['Scenario', 'PCA Component 1 (%)', 'PCA Component 2 (%)']],
+                 x='Scenario',
+                 y=['PCA Component 1 (%)', 'PCA Component 2 (%)'],
+                 barmode='group',
+                 title='Unsupervised Learning - PCA Explained Variance: Scenario 1 vs Scenario 2',
+                 labels={'value': 'Explained Variance (%)', 'variable': 'Component'},
+                 color_discrete_map={'PCA Component 1 (%)': '#4a90a4','PCA Component 2 (%)': '#006400'})
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white', yaxis_range=[0, 60])
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
     return fig
+    
 # View 9 - Sentiment Analysis
 def make_sentiment():
     results_task2 = []
     results_task2.append(['Producers', 70, 61, 41])
     results_task2.append(['Consumers', 900, 346, 545])
-    results_df_task2 = pd.DataFrame(results_task2, columns=[
-        'Perspective', 'Positive', 'Negative', 'Neutral'
-    ])
-    fig = px.bar(
-        results_df_task2,
-        x='Perspective',
-        y=['Positive', 'Negative', 'Neutral'],
-        barmode='group',
-        title='Sentiment Analysis - Producers vs Consumers Perspective',
-        labels={'value': 'Number of Posts', 'variable': 'Sentiment'},
-        color_discrete_map={
-            'Positive': '#006400',
-            'Negative': '#8B0000',
-            'Neutral': '#4a90a4'
-        }
-    )
+    results_df_task2 = pd.DataFrame(results_task2, columns=['Perspective', 'Positive', 'Negative', 'Neutral'])
+    
+    fig = px.bar(results_df_task2,
+                 x='Perspective',
+                 y=['Positive', 'Negative', 'Neutral'],
+                 barmode='group',
+                 title='Sentiment Analysis - Producers vs Consumers Perspective',
+                 labels={'value': 'Number of Posts', 'variable': 'Sentiment'},
+                 color_discrete_map={'Positive': '#006400', 'Negative': '#8B0000', 'Neutral': '#4a90a4'})
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
