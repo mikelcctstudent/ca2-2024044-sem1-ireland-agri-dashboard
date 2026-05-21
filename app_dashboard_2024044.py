@@ -48,7 +48,7 @@ with st.sidebar:
 # Plots
 # View 1 - Ireland Agri-Food Exports
 def make_exports_ireland():
-    top_exports = df_exports.groupby('Category')['Amount_EUR'].sum().reset_index()
+    top_exports = df_irish_exports.groupby('Category')['Amount_EUR'].sum().reset_index()
     top_exports = top_exports.sort_values('Amount_EUR', ascending=False).head(10)
     top_exports = top_exports.sort_values('Amount_EUR', ascending=True)
     top_exports['Amount_EUR_B'] = top_exports['Amount_EUR'] / 1e9
@@ -75,7 +75,7 @@ def make_exports_ireland():
     
 # View 2 - Dairy and Beef Export Trends
 def make_trends_dairy_beef():
-    df_dairy_beef = df_exports[df_exports['Category'].isin(['Dairy Produce', 'Beef'])]
+    df_dairy_beef = df_irish_exports[df_irish_exports['Category'].isin(['Dairy Produce', 'Beef'])]
     df_dairy_beef = df_dairy_beef.groupby(['Year', 'Category'])['Amount_EUR'].sum().reset_index()
     df_dairy_beef['Amount_EUR_B'] = df_dairy_beef['Amount_EUR'] / 1e9
     df_dairy_beef['Year'] = df_dairy_beef['Year'].astype(str)
@@ -93,7 +93,7 @@ def make_trends_dairy_beef():
     
 # View 3 - Export Composition
 def make_export_composition():
-    total_by_cat = df_exports.groupby('Category')['Amount_EUR'].sum().sort_values(ascending=False).reset_index()
+    total_by_cat = df_irish_exports.groupby('Category')['Amount_EUR'].sum().sort_values(ascending=False).reset_index()
     top5_pie = total_by_cat.head(5)
     others = pd.DataFrame({'Category': ['Others'], 'Amount_EUR': [total_by_cat['Amount_EUR'][5:].sum()]})
     pie_data = pd.concat([top5_pie, others], ignore_index=True)
@@ -207,9 +207,7 @@ def make_pca():
     results_for_task3 = []
     results_for_task3.append(['Scenario 1: Selecting all the products', 4, 0.4397, 40.07, 27.78])
     results_for_task3.append(['Scenario 2: Selecting only dairy and beef products', 3, 0.4315, 44.48, 26.47])
-    results_for_task3_df = pd.DataFrame(results_for_task3, columns=[
-        'Scenario', 'Optimal Clusters', 'Silhouette Score', 'PCA Component 1 (%)', 'PCA Component 2 (%)'
-    ])
+    results_for_task3_df = pd.DataFrame(results_for_task3, columns=['Scenario', 'Optimal Clusters', 'Silhouette Score', 'PCA Component 1 (%)', 'PCA Component 2 (%)'])
     fig = px.bar(
         results_for_task3_df[['Scenario', 'PCA Component 1 (%)', 'PCA Component 2 (%)']],
         x='Scenario',
