@@ -42,7 +42,7 @@ with st.sidebar:
         'Sentiment Analysis: Producers vs Consumers'
     ]
 # Dropdown to select the view - following professor's template
-    selected_dashboard_visualisation = st.selectbox('Select a visualisation:', view_list)
+    selected_dashboard_visualisation = st.selectbox('Select a visualisation:', dashboard_visualisation_list)
     
 #######################
 # Plots
