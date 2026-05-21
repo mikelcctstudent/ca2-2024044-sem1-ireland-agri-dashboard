@@ -41,12 +41,15 @@ with st.sidebar:
         'Unsupervised Learning: PCA Explained Variance',
         'Sentiment Analysis: Producers vs Consumers'
     ]
-# Dropdown to select the view - following professor's template
+# Dropdown to select the visualisation
     selected_dashboard_visualisation = st.selectbox('Select a visualisation:', dashboard_visualisation_list)
     
 #######################
 # Plots
-# View 1 - Ireland Agri-Food Exports
+
+# In the visualization 1: Ireland Agri-Food Exports (2018-2022)
+# Horizontal bar char is best for comparing many categories
+# Dairy produce and beef are marked in green as the baseline for our analysis in this project
 def make_exports_ireland():
     top_exports = df_irish_exports.groupby('Category')['Amount_EUR'].sum().reset_index()
     top_exports = top_exports.sort_values('Amount_EUR', ascending=False).head(10)
@@ -60,7 +63,7 @@ def make_exports_ireland():
                  y='Category', orientation='h', 
                  title="Ireland's Top 10 Agri-Food Exports by Category (2018-2022)",
                  labels={'Amount_EUR_B': 'Total Export Value (€ Billion)', 'Category': ''}, 
-                 color='color', color_discrete_map='identity') 
+                 color='color', color_discrete_map='identity')
     fig.update_layout(showlegend=False, 
                       plot_bgcolor='white', 
                       paper_bgcolor='white',
@@ -70,8 +73,9 @@ def make_exports_ireland():
     fig.update_yaxes(showgrid=False)
     return fig
     
-# View 2 - Dairy and Beef Export Trends
-def make_trends_dairy_beef():
+# In the visualization 2: Dairy and Beef Export Trends (2018-2022)
+# Line chart with markers is good for showing changes over time  
+def make_trends_dairy_beef(): 
     df_dairy_beef = df_irish_exports[df_irish_exports['Category'].isin(['Dairy Produce', 'Beef'])]
     df_dairy_beef = df_dairy_beef.groupby(['Year', 'Category'])['Amount_EUR'].sum().reset_index()
     df_dairy_beef['Amount_EUR_B'] = df_dairy_beef['Amount_EUR'] / 1e9
@@ -90,7 +94,8 @@ def make_trends_dairy_beef():
     fig.update_yaxes(showgrid=False, tickprefix='€', ticksuffix='B')
     return fig
     
-# View 3 - Export Composition
+# In the visualization 3: Export Composition for all years
+# Pie chart - best for showing proportions
 def make_export_composition():
     total_by_cat = df_irish_exports.groupby('Category')['Amount_EUR'].sum().sort_values(ascending=False).reset_index()
     top5_pie = total_by_cat.head(5)
@@ -105,13 +110,15 @@ def make_export_composition():
     fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
     return fig
     
-# View 4 - Ireland vs World Trade Balance
+# In the visualization 4: Ireland vs World in Trade Balance
+# Horizontal bar chart for Ireland was marked in green as baseline 
 def make_ireland_vs_world():
     trade_by_country = df_faostat.groupby('Country')['trade_balance'].sum().reset_index()
     trade_by_country = trade_by_country.sort_values('trade_balance', ascending=True)
     trade_by_country['color'] = trade_by_country['Country'].apply(
         lambda x: '#006400' if x == 'Ireland' else '#4a90a4'
     )
+    
     fig = px.bar(trade_by_country, 
                  x='trade_balance', 
                  y='Country', 
@@ -125,16 +132,16 @@ def make_ireland_vs_world():
     fig.update_yaxes(showgrid=False)
     return fig
     
-# View 5 - Supervised Learning Model Accuracy
-def make_model_accuracy():
+# In the visualization 5: Supervised Learning - Model Accuracy Comparison
+# Grouped bar chart will allow us do the comparison of our two scenarios
+def make_model_accuracy(): 
     results_final = []
     results_final.append(['Decision Tree', 66.97, 94.38])
     results_final.append(['Random Forest', 92.17, 94.78])
     results_final.append(['KNN', 91.30, 91.16])
     results_final.append(['GridSearchCV (Decision Tree)', 91.66, 94.38])
-    results_df_final = pd.DataFrame(results_final, columns=[
-        'Model', 'Scenario 1 - All Products (%)', 'Scenario 2 - Dairy & Beef (%)'
-    ])
+    results_df_final = pd.DataFrame(results_final, columns=['Model', 'Scenario 1 - All Products (%)', 'Scenario 2 - Dairy & Beef (%)'])
+    
     fig = px.bar(results_df_final,
                  x='Model',
                  y=['Scenario 1 - All Products (%)', 'Scenario 2 - Dairy & Beef (%)'],
@@ -147,15 +154,15 @@ def make_model_accuracy():
     fig.update_yaxes(showgrid=False)
     return fig
     
-# View 6 - Cross Validation Results
+# In the visualization 6: Supervised Learning - Cross Validation Results
+# Grouped bar chart using the data density principle
 def make_cross_validation():
     cv_comparison = []
     cv_comparison.append(['Decision Tree', 90.92, 88.42])
     cv_comparison.append(['Random Forest', 90.23, 89.99])
     cv_comparison.append(['KNN', 90.95, 90.35])
-    cv_comparison_df = pd.DataFrame(cv_comparison, columns=[
-        'Model', 'Scenario 1 CV (%)', 'Scenario 2 CV (%)'
-    ])
+    cv_comparison_df = pd.DataFrame(cv_comparison, columns=['Model', 'Scenario 1 CV (%)', 'Scenario 2 CV (%)'])
+    
     fig = px.bar(cv_comparison_df,
                  x='Model',
                  y=['Scenario 1 CV (%)', 'Scenario 2 CV (%)'],
@@ -168,14 +175,13 @@ def make_cross_validation():
     fig.update_yaxes(showgrid=False)
     return fig
     
-# View 7 - KMeans Silhouette Score
+# In the visualization 7: Unsupervised Learning - KMeans Silhouette Score
+# Here we have a simple bar chart, clean and direct 
 def make_kmeans():
     results_for_task3 = []
     results_for_task3.append(['Scenario 1: Selecting all the products', 4, 0.4397, 40.07, 27.78])
     results_for_task3.append(['Scenario 2: Selecting only dairy and beef products', 3, 0.4315, 44.48, 26.47])
-    results_for_task3_df = pd.DataFrame(results_for_task3, columns=[
-        'Scenario', 'Optimal Clusters', 'Silhouette Score', 'PCA Component 1 (%)', 'PCA Component 2 (%)'
-    ])
+    results_for_task3_df = pd.DataFrame(results_for_task3, columns=['Scenario', 'Optimal Clusters', 'Silhouette Score', 'PCA Component 1 (%)', 'PCA Component 2 (%)'])
     fig = px.bar(results_for_task3_df,
                  x='Scenario', y='Silhouette Score',
                  title='Unsupervised Learning - KMeans Silhouette Score: Scenario 1 vs Scenario 2',
@@ -187,7 +193,8 @@ def make_kmeans():
     fig.update_yaxes(showgrid=False)
     return fig
     
-# View 8 - PCA Explained Variance
+# In the visualization 8: Unsupervised Learning - PCA Explained Variance
+# Grouped bar chart for data density principle
 def make_pca():
     results_for_task3 = []
     results_for_task3.append(['Scenario 1: Selecting all the products', 4, 0.4397, 40.07, 27.78])
@@ -206,7 +213,9 @@ def make_pca():
     fig.update_yaxes(showgrid=False)
     return fig
     
-# View 9 - Sentiment Analysis
+# In the visualization 9: Sentiment Analysis for Producers vs Consumers
+# Grouped bar chart that allows comparison of two perspectives
+# This data was collected from Reddit using PRAW API (r/farming and r/agriculture)
 def make_sentiment():
     results_task2 = []
     results_task2.append(['Producers', 70, 61, 41])
