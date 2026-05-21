@@ -33,7 +33,8 @@ with st.sidebar:
             'Supervised Learning: Model Accuracy Comparison',
             'Supervised Learning: Cross Validation Results',
             'Unsupervised Learning: KMeans Silhouette Score',
-            'Unsupervised Learning: PCA Explained Variance'
+            'Unsupervised Learning: PCA Explained Variance',
+            'Sentiment Analysis: Producers vs Consumers'
         ]
     )
     
@@ -220,34 +221,60 @@ def make_pca():
     fig.update_xaxes(showgrid=False)
     fig.update_yaxes(showgrid=False)
     return fig
-    
+# View 9 - Sentiment Analysis
+def make_sentiment():
+    results_task2 = []
+    results_task2.append(['Producers', 70, 61, 41])
+    results_task2.append(['Consumers', 900, 346, 545])
+    results_df_task2 = pd.DataFrame(results_task2, columns=[
+        'Perspective', 'Positive', 'Negative', 'Neutral'
+    ])
+    fig = px.bar(
+        results_df_task2,
+        x='Perspective',
+        y=['Positive', 'Negative', 'Neutral'],
+        barmode='group',
+        title='Sentiment Analysis - Producers vs Consumers Perspective',
+        labels={'value': 'Number of Posts', 'variable': 'Sentiment'},
+        color_discrete_map={
+            'Positive': '#006400',
+            'Negative': '#8B0000',
+            'Neutral': '#4a90a4'
+        }
+    )
+    fig.update_layout(plot_bgcolor='white', paper_bgcolor='white')
+    fig.update_xaxes(showgrid=False)
+    fig.update_yaxes(showgrid=False)
+    return fig
 #######################
 # Dashboard Main Panel
 if selected_view == 'Ireland Agri-Food Exports (2018-2022)':
     st.plotly_chart(make_exports_ireland(), use_container_width=True)
 
-elif selected_view == 'Dairy and Beef Export Trends (2018-2022)':
-    st.plotly_chart(make_trends_dairy_beef(), use_container_width=True)
-
-elif selected_view == 'Export Composition for all years':
-    st.plotly_chart(make_export_composition(), use_container_width=True)
-
-elif selected_view == 'Ireland vs World: Trade Balance':
-    st.plotly_chart(make_ireland_vs_world(), use_container_width=True)
-
-elif selected_view == 'Supervised Learning: Model Accuracy Comparison':
-    st.plotly_chart(make_model_accuracy(), use_container_width=True)
-
-elif selected_view == 'Supervised Learning: Cross Validation Results':
-    st.plotly_chart(make_cross_validation(), use_container_width=True)
-
-elif selected_view == 'Unsupervised Learning: KMeans Silhouette Score':
-    st.plotly_chart(make_kmeans(), use_container_width=True)
-
-elif selected_view == 'Unsupervised Learning: PCA Explained Variance':
-    st.plotly_chart(make_pca(), use_container_width=True)
+    elif selected_view == 'Dairy and Beef Export Trends (2018-2022)':
+        st.plotly_chart(make_trends_dairy_beef(), use_container_width=True)
     
-    with st.expander('About', expanded=True):
+    elif selected_view == 'Export Composition for all years':
+        st.plotly_chart(make_export_composition(), use_container_width=True)
+    
+    elif selected_view == 'Ireland vs World: Trade Balance':
+        st.plotly_chart(make_ireland_vs_world(), use_container_width=True)
+    
+    elif selected_view == 'Supervised Learning: Model Accuracy Comparison':
+        st.plotly_chart(make_model_accuracy(), use_container_width=True)
+    
+    elif selected_view == 'Supervised Learning: Cross Validation Results':
+        st.plotly_chart(make_cross_validation(), use_container_width=True)
+    
+    elif selected_view == 'Unsupervised Learning: KMeans Silhouette Score':
+        st.plotly_chart(make_kmeans(), use_container_width=True)
+    
+    elif selected_view == 'Unsupervised Learning: PCA Explained Variance':
+        st.plotly_chart(make_pca(), use_container_width=True)
+    elif selected_view == 'Sentiment Analysis: Producers vs Consumers':
+        st.plotly_chart(make_sentiment(), use_container_width=True)
+        
+with st.expander('About', expanded=True):
         st.write('''
             - **Project:** CA2 - MSc in Data Analytics - Feb 2026
             - **Author:** Mikel Rodrigo de Paula Pinto
