@@ -1,46 +1,51 @@
 #######################
 # Import libraries
-import streamlit as st
-import pandas as pd
-import plotly.express as px
+import streamlit as st # This is the streamlit framework - https://streamlit.io
+import pandas as pd # For data manipulation and analysis
+import plotly.express as px # we used for creating interactive ploty charts - https://dash.ploty.com
 
 #######################
 # Page configuration
+# Here we are using lyout="wide" and follows the tufte's principle of data density
+# and because it uses the full screen width to show more data
 st.set_page_config(
     page_title="Ireland Agri-Food Dashboard",
-    page_icon="🇮🇪",
+    page_icon="IE",
     layout="wide",
     initial_sidebar_state="expanded")
 
 #######################
 # Load data
-df_exports = pd.read_csv('irish_exports_ml.csv')
+# These three datasets that was prepared in the task 3 in the data preparation
+df_irish_exports = pd.read_csv('irish_exports_ml.csv')
 df_faostat = pd.read_csv('faostat_ml.csv')
-df_farm = pd.read_csv('farm_structure_prepared_df.csv')
+df_farm_structure = pd.read_csv('farm_structure_prepared_df.csv')
 
 #######################
 # Sidebar
+# As we can se below the sidebar contains the dropdown menu to select the view and the information about the project
 with st.sidebar:
-    st.title('🇮🇪 Ireland Agri-Food Dashboard')
-    
-    selected_view = st.selectbox(
-        'Select a view',
-        options=[
-            'Ireland Agri-Food Exports (2018-2022)',
-            'Dairy and Beef Export Trends (2018-2022)',
-            'Export Composition for all years',
-            'Ireland vs World: Trade Balance',
-            'Supervised Learning: Model Accuracy Comparison',
-            'Supervised Learning: Cross Validation Results',
-            'Unsupervised Learning: KMeans Silhouette Score',
-            'Unsupervised Learning: PCA Explained Variance',
-            'Sentiment Analysis: Producers vs Consumers'
-        ]
-    )
+    st.title('Ireland Agri-Food Dashboard')
+
+# Here we have the list of views and has same 9 views as the Plotly Dash int he task 4
+# The farmer can select the view they need from the dropdown and also we are following Tufte principle of Data Density
+# because the farmer sees one clear chart at a time
+    dashboard_visualisation_list = [
+        'Ireland Agri-Food Exports (2018-2022)',
+        'Dairy and Beef Export Trends (2018-2022)',
+        'Export Composition for all years',
+        'Ireland vs World: Trade Balance',
+        'Supervised Learning: Model Accuracy Comparison',
+        'Supervised Learning: Cross Validation Results',
+        'Unsupervised Learning: KMeans Silhouette Score',
+        'Unsupervised Learning: PCA Explained Variance',
+        'Sentiment Analysis: Producers vs Consumers'
+    ]
+# Dropdown to select the view - following professor's template
+    selected_dashboard_visualisation = st.selectbox('Select a visualisation:', view_list)
     
 #######################
 # Plots
-
 # View 1 - Ireland Agri-Food Exports
 def make_exports_ireland():
     top_exports = df_exports.groupby('Category')['Amount_EUR'].sum().reset_index()
