@@ -254,30 +254,31 @@ def make_sentiment():
     
 #######################
 # Dashboard Main Panel
-if selected_view == 'Ireland Agri-Food Exports (2018-2022)':
+if selected_dashboard_visualisation == 'Ireland Agri-Food Exports (2018-2022)':
     st.plotly_chart(make_exports_ireland(), use_container_width=True)
 
-elif selected_view == 'Dairy and Beef Export Trends (2018-2022)':
+elif selected_dashboard_visualisation == 'Dairy and Beef Export Trends (2018-2022)':
         st.plotly_chart(make_trends_dairy_beef(), use_container_width=True)
     
-elif selected_view == 'Export Composition for all years':
+elif selected_dashboard_visualisation == 'Export Composition for all years':
         st.plotly_chart(make_export_composition(), use_container_width=True)
     
-elif selected_view == 'Ireland vs World: Trade Balance':
+elif selected_dashboard_visualisation == 'Ireland vs World: Trade Balance':
         st.plotly_chart(make_ireland_vs_world(), use_container_width=True)
     
-elif selected_view == 'Supervised Learning: Model Accuracy Comparison':
+elif selected_dashboard_visualisation == 'Supervised Learning: Model Accuracy Comparison':
         st.plotly_chart(make_model_accuracy(), use_container_width=True)
     
-elif selected_view == 'Supervised Learning: Cross Validation Results':
+elif selected_dashboard_visualisation == 'Supervised Learning: Cross Validation Results':
         st.plotly_chart(make_cross_validation(), use_container_width=True)
     
-elif selected_view == 'Unsupervised Learning: KMeans Silhouette Score':
+elif selected_dashboard_visualisation == 'Unsupervised Learning: KMeans Silhouette Score':
         st.plotly_chart(make_kmeans(), use_container_width=True)
     
-elif selected_view == 'Unsupervised Learning: PCA Explained Variance':
+elif selected_dashboard_visualisation == 'Unsupervised Learning: PCA Explained Variance':
         st.plotly_chart(make_pca(), use_container_width=True)
-elif selected_view == 'Sentiment Analysis: Producers vs Consumers':
+    
+elif selected_dashboard_visualisation == 'Sentiment Analysis: Producers vs Consumers':
         st.plotly_chart(make_sentiment(), use_container_width=True)
         
 with st.expander('About', expanded=True):
@@ -286,7 +287,7 @@ with st.expander('About', expanded=True):
             - **Author:** Mikel Rodrigo de Paula Pinto
             - **Student ID:** 2024044
             - **Scenario:** Agriculture in the Republic of Ireland
-            - **Area of interest:** Analysing Ireland's agricultural export sector: A comparative study of dairy and beef exports with selected EU and worldwide countries
+            - **Area of interest:** Analysing Ireland's agricultural export sector: A comparative study of dairy and beef exports with selected EU and   worldwide countries
             - **Ireland is the baseline for all comparisons.**
             - **Datasets:** Irish Agri-Food Exports 2018-2022 | Eurostat 2016 | FAOSTAT Trade Data
             - **GitHub:** https://github.com/CCT-Dublin/ca2-sem-1-mikelcctstudent
